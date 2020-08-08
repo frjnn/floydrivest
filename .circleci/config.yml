@@ -27,6 +27,6 @@ jobs:
             RUSTFLAGS: --cfg procmacro2_semver_exempt
       - run:
           name: Generate coverage report
-          command: cargo tarpaulin --out Xml --all-features
+          command: cargo tarpaulin --out Xml 
       - codecov/upload:
-          file: coverage.xml
+          file: cobertura.xml
