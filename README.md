@@ -11,7 +11,7 @@ A lightweight crate that brings `nth_element` to Rust. Available on [crates.io](
 Be sure that your `Cargo.toml` looks somewhat like this:
 ```toml
 [dependencies]
-floydrivest = "0.1.3"
+floydrivest = "0.2.1"
 ```
 ## Usage
 
