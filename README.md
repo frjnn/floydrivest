@@ -11,7 +11,7 @@ A lightweight crate that brings `nth_element` to Rust. Available on [crates.io](
 Be sure that your `Cargo.toml` looks somewhat like this:
 ```toml
 [dependencies]
-floydrivest = "0.1.2"
+floydrivest = "0.1.3"
 ```
 ## Usage
 
@@ -26,9 +26,7 @@ then  simply call `nth_element` on a vector.
 
 ```rust
 let mut v = vec![10, 7, 9, 7, 2, 8, 8, 1, 9, 4]; // a vector of i64.
-let len = v.len();
-
-nth_element(&mut v, 0, len - 1, 3, &mut Ord::cmp);
+nth_element(&mut v, 3, &mut Ord::cmp);
 
 assert_eq!(v[3], 7);
 ```
@@ -37,7 +35,7 @@ This implementation also handles generic data types as long as they satisfy the 
 
 ## Implementation
 
-Link to the [original paper](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.309.7108&rep=rep1&type=pdf).
+Link to the [original paper](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.309.7108&rep=rep1&type=pdf) with ALGOL60 pseudocode.
 
 ## Performance
 

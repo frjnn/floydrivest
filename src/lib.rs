@@ -13,22 +13,24 @@ use std::cmp::{max, min, Ordering};
 ///
 /// ```
 /// let mut v = vec![10, 7, 9, 7, 2, 8, 8, 1, 9, 4]; // a vector of i64.
-/// let len = v.len();
-/// floydrivest::nth_element(&mut v, 0, len-1, 3, &mut Ord::cmp);
+/// floydrivest::nth_element(&mut v, 3, &mut Ord::cmp);
 ///
 /// assert_eq!(v[3], 7);
 /// ```
 ///
 /// # Panics
 ///
-/// if `left`, `right` or `nth_el` are out of bounds.
-pub fn nth_element<T, F>(
-    a: &mut Vec<T>,
-    mut left: usize,
-    mut right: usize,
-    nth_el: usize,
-    cmp: &mut F,
-) where
+/// if `left`, `right` or `nth_el` are out of bounds
+pub fn nth_element<T, F>(a: &mut [T], nth_el: usize, cmp: &mut F)
+where
+    F: FnMut(&T, &T) -> Ordering,
+    T: Clone,
+{
+    floydrivest(a, nth_el, 0, a.len() - 1, cmp);
+}
+
+fn floydrivest<T, F>(a: &mut [T], nth_el: usize, mut left: usize, mut right: usize, cmp: &mut F)
+where
     F: FnMut(&T, &T) -> Ordering,
     T: Clone,
 {
@@ -52,7 +54,7 @@ pub fn nth_element<T, F>(
             let inner: f64 = nth_el as f64 - isn + sd;
             let ll: usize = max(left, inner as usize);
             let rr: usize = min(right, (inner + s) as usize);
-            nth_element(a, ll, rr, nth_el, cmp);
+            floydrivest(a, nth_el, ll, rr, cmp);
         }
         // The following code partitions a[l : r] about t, it is similar to Hoare's
         // algorithm but it'll run faster on most machines since the subscript range
@@ -66,29 +68,29 @@ pub fn nth_element<T, F>(
         }
         while i < j {
             a.swap(i, j);
-            i = i.saturating_add(1);
-            j = j.saturating_sub(1);
+            i += 1;
+            j -= 1;
             while cmp(&a[i], &t) == Ordering::Less {
-                i = i.saturating_add(1);
+                i += 1;
             }
             while cmp(&a[j], &t) == Ordering::Greater {
-                j = j.saturating_sub(1);
+                j -= 1;
             }
         }
         if cmp(&a[left], &t) == Ordering::Equal {
             a.swap(left, j);
         } else {
-            j = j.saturating_add(1);
+            j += 1;
             a.swap(j, right);
         }
         // Now we adjust left and right so that they
         // surround the subset containing the
         // (k - left + 1)-th smallest element.
         if j <= nth_el {
-            left = j.saturating_add(1);
-        }
-        if nth_el <= j {
-            right = j.saturating_sub(1);
+            left = j + 1;
+            if nth_el <= j {
+                right = j.saturating_sub(1);
+            }
         }
     }
 }
@@ -100,17 +102,15 @@ mod tests {
     #[test]
     fn test_simple() {
         let mut v = vec![10, 7, 9, 7, 2, 8, 8, 1, 9, 4];
-        let len = v.len();
-        nth_element(&mut v, 0, len - 1, 3, &mut Ord::cmp);
+        nth_element(&mut v, 3, &mut Ord::cmp);
         assert_eq!(v[3], 7);
     }
     #[test]
     #[cfg(not(tarpaulin_include))]
     fn test_iter() {
         let mut v = vec![9, 5, 0, 6, 8, 2, 3, 7, 1, 4];
-        let len = v.len();
         for n in 0..10 {
-            nth_element(&mut v, 0, len - 1, n, &mut Ord::cmp);
+            nth_element(&mut v, n, &mut Ord::cmp);
             assert_eq!(v[n], n);
         }
     }
@@ -118,7 +118,7 @@ mod tests {
     #[cfg(not(tarpaulin_include))]
     fn big_test() {
         // “a man has to do what a man has to do“.
-        let mut vec: Vec<u64> = vec![
+        let mut v: Vec<u64> = vec![
             1069, 460, 271, 127, 766, 633, 939, 175, 928, 388, 404, 12, 949, 1104, 403, 3, 387,
             208, 440, 206, 355, 717, 671, 524, 931, 700, 90, 1018, 1139, 120, 438, 1016, 918, 685,
             777, 1091, 407, 177, 576, 31, 1155, 690, 695, 546, 570, 1134, 369, 900, 872, 985, 784,
@@ -191,10 +191,9 @@ mod tests {
             954, 1009, 74, 423, 1125, 749, 197, 140, 1099, 315, 4, 60, 592, 1195, 371, 863, 44,
             677, 182, 992, 245, 1041, 594, 200, 1014, 484, 1013, 1035, 715, 1033, 1029, 643, 529,
         ];
-        let len = vec.len();
-        for n in 0..len {
-            nth_element(&mut vec, 0, len - 1, n, &mut Ord::cmp);
-            assert_eq!(vec[n], n as u64);
+        for n in 0..(v.len() - 1) {
+            nth_element(&mut v, n, &mut Ord::cmp);
+            assert_eq!(v[n], n as u64);
         }
     }
 }
