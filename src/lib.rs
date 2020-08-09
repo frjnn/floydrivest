@@ -2,8 +2,7 @@
 //!
 //! `floydrivest` is a small and extremely lightweight crate that provides
 //! an in-place implementation of the Floyd-Rivest algorithm.
-use std::cmp::max;
-use std::cmp::min;
+use std::cmp::{max, min, Ordering};
 /// Moves the n-th element of the given Vector in the n-th position
 /// by using the Floyd-Rivest algorithm with linear time complexity.
 ///
@@ -15,7 +14,7 @@ use std::cmp::min;
 /// ```
 /// let mut v = vec![10, 7, 9, 7, 2, 8, 8, 1, 9, 4]; // a vector of i64.
 /// let len = v.len();
-/// floydrivest::nth_element(&mut v, 0, len-1, 3);
+/// floydrivest::nth_element(&mut v, 0, len-1, 3, &mut Ord::cmp);
 ///
 /// assert_eq!(v[3], 7);
 /// ```
@@ -23,9 +22,15 @@ use std::cmp::min;
 /// # Panics
 ///
 /// if `left`, `right` or `nth_el` are out of bounds.
-pub fn nth_element<T>(a: &mut Vec<T>, mut left: usize, mut right: usize, nth_el: usize)
-where
-    T: PartialEq + PartialOrd + Clone,
+pub fn nth_element<T, F>(
+    a: &mut Vec<T>,
+    mut left: usize,
+    mut right: usize,
+    nth_el: usize,
+    cmp: &mut F,
+) where
+    F: FnMut(&T, &T) -> Ordering,
+    T: Clone,
 {
     let mut i: usize;
     let mut j: usize;
@@ -47,7 +52,7 @@ where
             let inner: f64 = nth_el as f64 - isn + sd;
             let ll: usize = max(left, inner as usize);
             let rr: usize = min(right, (inner + s) as usize);
-            nth_element(a, ll, rr, nth_el);
+            nth_element(a, ll, rr, nth_el, cmp);
         }
         // The following code partitions a[l : r] about t, it is similar to Hoare's
         // algorithm but it'll run faster on most machines since the subscript range
@@ -56,21 +61,21 @@ where
         i = left;
         j = right;
         a.swap(left, nth_el);
-        if a[right] > t {
+        if cmp(&a[right], &t) == Ordering::Greater {
             a.swap(right, left);
         }
         while i < j {
             a.swap(i, j);
             i = i.saturating_add(1);
             j = j.saturating_sub(1);
-            while a[i] < t {
+            while cmp(&a[i], &t) == Ordering::Less {
                 i = i.saturating_add(1);
             }
-            while a[j] > t {
+            while cmp(&a[j], &t) == Ordering::Greater {
                 j = j.saturating_sub(1);
             }
         }
-        if a[left] == t {
+        if cmp(&a[left], &t) == Ordering::Equal {
             a.swap(left, j);
         } else {
             j = j.saturating_add(1);
@@ -96,7 +101,7 @@ mod tests {
     fn test_simple() {
         let mut v = vec![10, 7, 9, 7, 2, 8, 8, 1, 9, 4];
         let len = v.len();
-        nth_element(&mut v, 0, len - 1, 3);
+        nth_element(&mut v, 0, len - 1, 3, &mut Ord::cmp);
         assert_eq!(v[3], 7);
     }
     #[test]
@@ -105,7 +110,7 @@ mod tests {
         let mut v = vec![9, 5, 0, 6, 8, 2, 3, 7, 1, 4];
         let len = v.len();
         for n in 0..10 {
-            nth_element(&mut v, 0, len - 1, n);
+            nth_element(&mut v, 0, len - 1, n, &mut Ord::cmp);
             assert_eq!(v[n], n);
         }
     }
@@ -188,7 +193,7 @@ mod tests {
         ];
         let len = vec.len();
         for n in 0..len {
-            nth_element(&mut vec, 0, len - 1, n);
+            nth_element(&mut vec, 0, len - 1, n, &mut Ord::cmp);
             assert_eq!(vec[n], n as u64);
         }
     }
