@@ -50,7 +50,7 @@ where
             nth_element(a, ll, rr, nth_el);
         }
         // The following code partitions a[l : r] about t, it is similar to Hoare's
-        // algorith but it'll run faster on most machines since the subscript range
+        // algorithm but it'll run faster on most machines since the subscript range
         // checking on i and j has been removed.
         t = a[nth_el].clone();
         i = left;
