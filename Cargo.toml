@@ -1,6 +1,6 @@
 [package]
 name = "floydrivest"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Gethseman <f.iannelli.francesco229@gmail.com>"]
 edition = "2018"
 description = "A lightweight crate that brings the Floyd-Rivest implementation of nth_element."
@@ -8,6 +8,7 @@ repository = "https://github.com/Gethseman/floydrivest"
 license = "MIT"
 keywords = ["nth_element", "Floyd-Rivest", "SELECT"]
 categories = ["algorithms"]
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
