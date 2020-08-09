@@ -25,7 +25,7 @@ use floydrivest::nth_element;
 then  simply call `nth_element` on a vector.
 
 ```rust
-let mut v = vec![10, 7, 9, 7, 2, 8, 8, 1, 9, 4]; // a vector of i64.
+let mut v = vec![10, 7, 9, 7, 2, 8, 8, 1, 9, 4];
 nth_element(&mut v, 3, &mut Ord::cmp);
 
 assert_eq!(v[3], 7);

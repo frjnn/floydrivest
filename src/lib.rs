@@ -12,7 +12,7 @@ use std::cmp::{max, min, Ordering};
 /// # Examples
 ///
 /// ```
-/// let mut v = vec![10, 7, 9, 7, 2, 8, 8, 1, 9, 4]; // a vector of i64.
+/// let mut v = vec![10, 7, 9, 7, 2, 8, 8, 1, 9, 4];
 /// floydrivest::nth_element(&mut v, 3, &mut Ord::cmp);
 ///
 /// assert_eq!(v[3], 7);
@@ -20,7 +20,7 @@ use std::cmp::{max, min, Ordering};
 ///
 /// # Panics
 ///
-/// if `left`, `right` or `nth_el` are out of bounds
+/// if `nth_el` is out of bounds.
 pub fn nth_element<T, F>(a: &mut [T], nth_el: usize, cmp: &mut F)
 where
     F: FnMut(&T, &T) -> Ordering,
