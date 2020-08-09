@@ -4,7 +4,7 @@
 [![Gethseman](https://circleci.com/gh/Gethseman/floydrivest.svg?style=shield)](https://app.circleci.com/pipelines/github/Gethseman/floydrivest)
 [![codecov](https://codecov.io/gh/Gethseman/floydrivest/branch/master/graph/badge.svg)](https://codecov.io/gh/Gethseman/floydrivest)
 
-A lightweight crate that brings `nth_element` to Rust.
+A lightweight crate that brings `nth_element` to Rust. Available on [crates.io](https://crates.io/crates/floydrivest).
 
 ## Installation 
 
