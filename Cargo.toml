@@ -1,10 +1,10 @@
 [package]
 name = "floydrivest"
-version = "0.2.2"
-authors = ["Gethseman <f.iannelli.francesco229@gmail.com>"]
+version = "0.2.3"
+authors = ["frjnn <f.iannelli.francesco229@gmail.com>"]
 edition = "2018"
 description = "A lightweight crate that brings the Floyd-Rivest implementation of nth_element."
-repository = "https://github.com/Gethseman/floydrivest"
+repository = "https://github.com/frjnn/floydrivest"
 license = "MIT"
 keywords = ["nth_element", "Floyd-Rivest", "SELECT", "order_statistics"]
 categories = ["algorithms"]
