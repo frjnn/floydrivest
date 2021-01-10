@@ -1,6 +1,6 @@
 [package]
 name = "floydrivest"
-version = "0.2.3"
+version = "0.2.4"
 authors = ["frjnn <f.iannelli.francesco229@gmail.com>"]
 edition = "2018"
 description = "A lightweight crate that brings the Floyd-Rivest implementation of nth_element."
